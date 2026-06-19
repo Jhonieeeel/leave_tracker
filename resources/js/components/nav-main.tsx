@@ -1,4 +1,3 @@
-import { Link } from '@inertiajs/react';
 import {
     SidebarGroup,
     SidebarGroupLabel,
@@ -7,30 +6,35 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
-import type { NavItem } from '@/types';
+import type { MainNav } from '@/types';
+import { Link } from '@inertiajs/react';
 
-export function NavMain({ items = [] }: { items: NavItem[] }) {
+export function NavMain({ items = [] }: { items: MainNav[] }) {
     const { isCurrentUrl } = useCurrentUrl();
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarMenu>
-                {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={isCurrentUrl(item.href)}
-                            tooltip={{ children: item.title }}
-                        >
-                            <Link href={item.href} prefetch>
-                                {item.icon && <item.icon />}
-                                <span>{item.title}</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
+            {items.map((item) => (
+                <div className="mt-5" key={item.groupLabel}>
+                    <SidebarGroupLabel>{item.groupLabel}</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {item.items.map((data) => (
+                            <SidebarMenuItem key={data.title}>
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={isCurrentUrl(data.href)}
+                                    tooltip={{ children: data.title }}
+                                >
+                                    <Link href={data.href} prefetch>
+                                        {data.icon && <data.icon />}
+                                        <span>{data.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </div>
+            ))}
         </SidebarGroup>
     );
 }

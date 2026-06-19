@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Actions\Leave\RecordFileLeave;
 use App\Data\LeaveData;
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LeaveController extends Controller
 {
@@ -14,7 +16,10 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render(
+            "Leave/LeaveIndex",
+            ['users' => User::select(['id', 'name'])->get()]
+        );
     }
 
     /**
